@@ -38,7 +38,7 @@ let getAccessToken () =
 
 let getBeatmapsPage (offset: int) =
     task {
-        let url = sprintf "https://osu.ppy.sh/api/v2/users/33271657/beatmapsets/most_played?limit=100&offset=%i" offset
+        let url = sprintf "https://osu.ppy.sh/api/v2/users/%i/beatmapsets/most_played?limit=100&offset=%i" Config.userId offset
         let! token = getAccessToken()
 
         let req = new HttpRequestMessage(HttpMethod.Get, url)
@@ -112,9 +112,7 @@ let saveBeatmap id =
         printfn "Downloading %i..." id
 
         let! bytes = getBeatmapBytes id
-
-        Directory.CreateDirectory("D:\\beatmaps") |> ignore
-        do! File.WriteAllBytesAsync(sprintf "D:\\beatmaps\\%i.osz" id, bytes)
+        do! File.WriteAllBytesAsync(sprintf "%s/%i.osz" Config.outputDir id, bytes)
 
         saved <- saved + 1.
         let percentage =
@@ -136,6 +134,10 @@ let main _ =
 
     printfn "Saving %i beatmaps" (total |> int)
     printfn ""
+
+    Directory.CreateDirectory(Config.outputDir) |> ignore
     beatmaps |> List.iter (fun x -> saveBeatmap(x).Result)
+
+    printfn "Done !"
 
     0

@@ -1,3 +1,5 @@
+outputDirectory: "C:/beatmaps/"
+userId: 0
 clientId: 0
 clientSecret: YOUR_CLIENT_SECRET
-cookie: YOUR_COOKIE
+cookie: XSRF-TOKEN=YOUR_COOKIE; osu_session=YOUR_COOKIE
